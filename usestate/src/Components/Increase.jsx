@@ -10,7 +10,7 @@ const Increase = () => {
   }
 
   function DecreaseNum() {
-    if (Number >= 0) return setNumber(Number - 1);
+    if (Number > 0) return setNumber(Number - 1);
   }
 
   // self task:
