@@ -6,7 +6,7 @@ const App = () => {
   const [Tasks, setTasks] = useState([]);
 
   function SubmitForm() {
-    console.log("Task Added", { Heading: Title, List: Notes });
+    console.log("Task Added", { Heading: Title , List: Notes });
 
     let newTask = [...Tasks];
     newTask.push({ Heading: Title, List: Notes });
