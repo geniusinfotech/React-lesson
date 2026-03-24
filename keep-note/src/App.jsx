@@ -1,94 +1,114 @@
-import React, { useState } from "react";
+import { LayoutList, NotebookPen } from "lucide-react";
+import { useState } from "react";
 
 const App = () => {
-  const [Title, setTitle] = useState("");
-  const [Notes, setNotes] = useState("");
+  const [Heading, setHeading] = useState("");
+  const [Notes, setNots] = useState("");
   const [Tasks, setTasks] = useState([]);
 
-  function SubmitForm() {
-    console.log("Task Added", { Heading: Title , List: Notes });
+  const SubmitForm = () => {
+    console.log("New Task Create :", {
+      "Task Heading": Heading,
+      Notes: Notes,
+    });
 
-    let newTask = [...Tasks];
-    newTask.push({ Heading: Title, List: Notes });
-    setTasks(newTask);
+    let Add = [...Tasks];
+    Add.push({
+      Title: Heading,
+      Task: Notes,
+      date: new Date().toLocaleDateString(),
+    });
+    setTasks(Add);
 
-    console.log(Tasks);
+    console.log("Tasks : ", Tasks);
 
-    setTitle("");
-    setNotes("");
-  }
-
+    setHeading("");
+    setNots("");
+  };
   return (
     <>
-      <section className="lg:flex items-center justify-items-center h-screen">
-        {/* Submit Form UI */}
-        <div className="lg:w-1/2 h-screen flex items-center justify-center p-4">
-          <div className="bg-black/70 max-w-sm w-full p-2 rounded-3xl shadow-2xl">
-            <form
-              className="bg-black text-white rounded-2xl p-6 w-full"
-              onSubmit={(e) => {
-                e.preventDefault();
-                SubmitForm();
-              }}
-            >
-              <h1 className="text-center text-4xl font-bold my-1">
+      <section className="flex item-center Justify-center w-full h-screen">
+        {/* form for add tasks */}
+        <div className="w-1/2 h-screen flex items-center justify-center">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              SubmitForm();
+            }}
+          >
+            <div className="flex gap-4 items-center my-4">
+              <NotebookPen
+                strokeWidth={3}
+                className="w-32 h-32 text-green-700"
+              />
+              <h1 className="text-5xl font-bold text-green-950 text-shadow-lg">
                 Add Your Task
               </h1>
+            </div>
 
-              <input
-                type="text"
-                className="w-full px-4 py-2 bg-[#222] rounded-md my-2 text-white font-semibold outline-none focus:ring-2 focus:ring-white"
-                placeholder="Heading"
-                value={Title}
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                }}
-              />
+            <input
+              type="text"
+              className="w-full bg-green-200 rounded-md px-4 py-2 my-2"
+              placeholder="Enter your task"
+              value={Heading}
+              onChange={(e) => {
+                if (e.target.value.length > 10) {
+                  return alert("You can't put more then 10 characters");
+                }
+                setHeading(e.target.value);
+              }}
+            />
+            <textarea
+              rows={8}
+              className="w-full bg-green-200 rounded-md px-4 py-2 my-2"
+              placeholder="Enter your description"
+              value={Notes}
+              onChange={(e) => {
+                if (e.target.value.length > 100) {
+                  return alert("You can't put more then 100 characters");
+                }
+                setNots(e.target.value);
+              }}
+            ></textarea>
 
-              <textarea
-                rows={8}
-                className="w-full px-4 py-2 bg-[#222] rounded-md my-2 text-white outline-none focus:ring-2 focus:ring-white"
-                placeholder="Notes"
-                value={Notes}
-                onChange={(e) => {
-                  setNotes(e.target.value);
-                }}
-              ></textarea>
-
-              <input
-                type="submit"
-                value="Add Task"
-                className="w-full bg-white text-black rounded-md font-semibold px-4 py-2 my-2 active:scale-95 active:bg-white/50 active:text-white"
-              />
-            </form>
-          </div>
+            <input
+              type="submit"
+              value="New Task"
+              className="w-full text-center px-4 py-2 rounded-md bg-green-900 text-green-100 active:scale-95 active:bg-green-100 active:text-green-900 transition-all font-semibold"
+            />
+          </form>
         </div>
 
-        {/* UI for Notes */}
-        <div className="lg:w-1/2 h-screen lg:border-l-4 border-dashed border-black max-lg:border-t-4 bg-gray-200 flex flex-wrap items-center justify-center p-6 gap-6 overflow-auto">
-          {Tasks.map((task, id) => {
-            return (
-              <div
-                className="w-full max-w-78 h-78 bg-white rounded-4xl shadow-2xl flex items-end justify-center p-4 relative"
-                key={id}
-              >
-                <img
-                  src="./pin.png"
-                  alt="pin"
-                  className="w-15 h-10 absolute z-10 top-2"
-                />
-                <div className="w-full h-60 bg-orange-200 rounded-4xl p-4">
-                  <h1 className="text-5xl font-bold">{id + 1}</h1>
-                  <h1 className="text-4xl font-semibold text-center my-1">
-                    {task.Heading}
-                  </h1>
-                  <p className="text-gray-400 font-medium text-2xl">
-                    {task.List}
-                  </p>
+        {/* create a div that show ours notes */}
+        <div className="w-1/2 h-screen border-l-2 border-black overflow-auto border-dashed p-4 bg-[#faf3ee]">
+          <div className="flex justify-center items-center gap-4 my-4">
+            <LayoutList
+              strokeWidth={3}
+              className="w-10 h-10 text-[#582f0e] font-bold"
+            />
+            <h1 className="text-4xl text-[#582f0e]">Your Task</h1>
+          </div>
+
+          <div className="flex flex-wrap itmes-center justify-center gap-6 w-full">
+            {Tasks.map((data, id) => {
+              return (
+                <div className="border-2 border-[#582f0e] flex items-center justify-center p-2 rounded-4xl w-full h-72 max-w-72">
+                  <div className="bg-[#582f0e] rounded-3xl text-white max-w-68 h-68 p-4">
+                    <div className="w-68 h-56">
+                      <h1 className="text-4xl font-bold">{id + 1}</h1>
+                      <h2 className="text-4xl text-center my-1 font-h2 font-bold">
+                        {data.Title}
+                      </h2>
+                      <p className="text-xl my-1 hyphens-auto">{data.Task}</p>
+                    </div>
+                    <p className="text-md text-[#faf3ee]/50 text-right flex items-end justify-end">
+                      {data.date}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </section>
     </>
