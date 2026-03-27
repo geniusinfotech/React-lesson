@@ -1,0 +1,55 @@
+import { useEffect, useState } from "react";
+import ProductCard from "../../ui/ProductCard";
+import axios from "axios";
+import { Link } from "react-router-dom";
+
+const ProductBar = () => {
+  const [product, setProduct] = useState([]);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        let response = await axios.get(
+          "https://dummyjson.com/products?limit=4",
+        );
+        console.log(response.data.products);
+        setProduct(response.data.products);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchProduct();
+  }, []);
+
+  return (
+    <>
+      <section className="p-6 flex flex-col items-center justify-center px-24">
+        <div className="w-full my-8">
+          <h3 className="text-xl text-gray-400 font-semibold">Our Products</h3>
+          <div className="flex items-center justify-between">
+            <h1 className="text-5xl font-semibold py-2">Our Top Seller Products</h1>
+            <div className="flex items-center justify-center gap-2">
+              <div className="px-3 py-1 text-white bg-[#583101] font-medium text-md inline-block">All </div>
+              <div className="px-3 py-1 border text-[#583101] font-medium text-md inline-block">Woman</div>
+              <div className="px-3 py-1 border text-[#583101] font-medium text-md inline-block">Man</div>
+              <div className="px-3 py-1 border text-[#583101] font-medium text-md inline-block">Accessories</div>
+            </div>
+          </div>
+        </div>
+
+        {/* product cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full">
+          {product.map((data) => {
+            return (
+              <Link to={`/product/${data.id}`} key={data.id}>
+                <ProductCard product_data={data} />
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+    </>
+  );
+};
+
+export default ProductBar;
